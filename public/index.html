@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0a0b0e">
+  <title>Digital Evidence Custody Locker | Zero-Knowledge Forensic Vault</title>
+  <meta name="description" content="A zero-knowledge, forensic-grade digital evidence custody platform for survivors of cyber harassment, deepfakes, and online abuse.">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- ZERO-TRACE RE-ENTRY SANITIZATION -->
+  <script>
+  (function() {
+    try {
+      // Clear any legacy lockout flags so lawful re-entry to the vault always loads the app
+      localStorage.removeItem('panic_lockout_active');
+      localStorage.removeItem('panic_lockout_until');
+      localStorage.removeItem('panic_dest');
+    } catch (e) {}
+  })();
+  </script>
+
+  <!-- Instant Pre-cache & Pre-connect for Zero-Delay Emergency Escape to Google & Safe Camouflage Sites -->
+  <link rel="dns-prefetch" href="https://www.google.com">
+  <link rel="preconnect" href="https://www.google.com" crossorigin>
+  <link rel="prefetch" href="https://www.google.com">
+  <script type="speculationrules">
+  {
+    "prerender": [
+      { "source": "list", "urls": ["https://www.google.com/"] }
+    ],
+    "prefetch": [
+      { "source": "list", "urls": ["https://www.google.com/"] }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Safety Quick Exit Bar (Survivor Protection) -->
+  <aside class="safety-bar" id="safety-bar">
+    <div class="safety-bar-left">
+      <span class="safety-icon">🛡️</span>
+      <span class="safety-text"><strong data-i18n="safety.active">Survivor Safety Active:</strong></span>
+      <span class="hotkey-badge" data-i18n="safety.doubleBar" title="Double click this red bar for emergency escape">Double-Click Bar</span>
+      <span class="hotkey-badge" data-i18n="safety.doubleEsc" title="Double press the ESC key to escape">Double ESC</span>
+      <span id="badge-bg-panic" class="hotkey-badge" data-i18n="safety.doubleAnywhere" style="display: none; background: rgba(255, 69, 58, 0.35);" title="Double click anywhere is enabled">Double-Click Anywhere</span>
+    </div>
+
+    <div class="safety-bar-right">
+      <button id="btn-open-panic-settings" class="btn-safety-aux" title="Configure emergency exit preferences">
+        <span data-i18n="safety.panicSettings">⚙️ Panic Settings</span>
+      </button>
+      <button id="btn-open-helplines" class="btn-safety-aux" title="Emergency Cyber Helplines & Resources">
+        <span data-i18n="safety.helplines">🆘 1930 Helplines</span>
+      </button>
+      <button id="quick-escape-btn" class="btn-escape" title="Emergency escape to Google">
+        <span data-i18n="safety.quickExit">⚠️ Quick Exit</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Application Navigation Header -->
+  <!-- Application Navigation Header (Apple Glass Material) -->
+  <header class="app-nav">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">🛡️</div>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="brand-title" data-i18n="nav.brandTitle">Evidence Locker</span>
+          <span class="brand-badge" data-i18n="nav.brandBadge">Zero-Knowledge</span>
+        </div>
+        <div class="brand-sub" data-i18n="nav.brandSub">Forensic Chain of Custody & Cyber Safety Platform</div>
+      </div>
+    </div>
+
+    <!-- Apple-style Segmented Navigation Control -->
+    <nav class="nav-controls">
+      <div class="segmented-control" role="tablist" aria-label="Main Navigation">
+        <!-- 1. Simple View Tab (Survivor Friendly) -->
+        <button id="nav-btn-simple" class="nav-tab-btn active" data-view-target="view-vault" role="tab" title="Simplified, reassuring interface for survivors">
+          <span data-i18n="nav.modeSimple">🕊️ Simple View</span>
+        </button>
+
+        <!-- 2. Forensic View Tab (Courtroom & Police Workstation) -->
+        <button id="nav-btn-forensic" class="nav-tab-btn" data-view-target="view-forensic" role="tab" title="Cryptographic ledger, SHA-256 verification, and Section 65B certificates">
+          <span data-i18n="nav.modeForensic">⚖️ Forensic View</span>
+        </button>
+
+        <!-- 3. Safety & Helplines Tab -->
+        <button id="nav-btn-resources" class="nav-tab-btn" data-view-target="view-resources" role="tab" title="Emergency 1930 helplines, NCW, and legal aid">
+          <span data-i18n="nav.helplinesLegal">🤝 Helplines & Legal</span>
+        </button>
+      </div>
+
+      <!-- Keynote Presentation Deck Link -->
+      <a href="presentation.html" class="nav-tab-btn" style="background: rgba(0, 113, 227, 0.12); border: 1px solid rgba(0, 113, 227, 0.28); color: #70b5ff; padding: 6px 14px; text-decoration: none;" title="Launch Animated Executive Keynote Deck" target="_blank">
+        <span>📽️ Keynote Deck</span>
+      </a>
+
+      <!-- Multi-Language Selector Dropdown (Apple Custom Frosted Popover) -->
+      <div class="lang-selector-wrapper" id="lang-custom-dropdown-container" title="Select Interface Language">
+        <button type="button" id="lang-custom-btn" class="lang-custom-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="lang-icon" aria-hidden="true">🌐</span>
+          <span id="lang-selected-label">English (IN)</span>
+          <span class="lang-chevron-icon" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </span>
+        </button>
+        <div id="lang-custom-menu" class="lang-custom-menu" role="menu">
+          <button type="button" class="lang-option-btn active" data-lang="en">
+            <span>English (IN)</span>
+            <span class="lang-check">✓</span>
+          </button>
+          <button type="button" class="lang-option-btn" data-lang="hi">
+            <span>हिन्दी (Hindi)</span>
+            <span class="lang-check"></span>
+          </button>
+          <button type="button" class="lang-option-btn" data-lang="ta">
+            <span>தமிழ் (Tamil)</span>
+            <span class="lang-check"></span>
+          </button>
+          <button type="button" class="lang-option-btn" data-lang="te">
+            <span>తెలుగు (Telugu)</span>
+            <span class="lang-check"></span>
+          </button>
+          <button type="button" class="lang-option-btn" data-lang="bn">
+            <span>বাংলা (Bengali)</span>
+            <span class="lang-check"></span>
+          </button>
+          <button type="button" class="lang-option-btn" data-lang="mr">
+            <span>मराठी (Marathi)</span>
+            <span class="lang-check"></span>
+          </button>
+        </div>
+        <!-- Hidden Native Select (Synchronized for Accessibility & Compatibility) -->
+        <select id="lang-select" class="lang-dropdown-hidden" aria-hidden="true" style="display: none;">
+          <option value="en">English (IN)</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="te">తెలుగు (Telugu)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+          <option value="mr">मराठी (Marathi)</option>
+        </select>
+      </div>
+
+      <!-- Active User Profile & Logout -->
+      <div id="auth-nav-controls" style="display: none; align-items: center; gap: 10px;">
+        <div class="user-status-pill">
+          <span class="status-dot"></span>
+          <span id="user-pseudonym-label">Pseudonym</span>
+          <span class="crypto-active-badge" title="PBKDF2 600,000 Rounds In-Memory Master Key">AES-256</span>
+        </div>
+        <div class="auto-lock-pill" id="auto-lock-indicator" title="Inactivity auto-lock timer">
+          <span class="auto-lock-icon" aria-hidden="true">⏱️</span>
+          <span id="auto-lock-label">3m</span>
+        </div>
+        <button id="btn-logout" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.82rem;">
+          <span data-i18n="nav.lockVault">Lock Vault</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="container">
+
+    <!-- ======================================================== -->
+    <!-- 1. LOGIN VIEW -->
+    <!-- ======================================================== -->
+    <section id="view-login" class="view-section active">
+      <div class="auth-wrapper">
+        <div class="card glass-card">
+          <div class="auth-icon-header">
+            <div class="auth-icon-circle">🔑</div>
+            <h1 class="card-title" data-i18n="login.title">Unlock Evidence Vault</h1>
+            <p class="card-subtitle" data-i18n="login.subtitle">Zero-knowledge AES-256 decryption occurs entirely in local browser memory.</p>
+          </div>
+
+          <form id="form-login">
+            <div class="form-group">
+              <label for="login-pseudonym" data-i18n="login.userLabel">Email or Pseudonym</label>
+              <input type="text" id="login-pseudonym" class="form-input" placeholder="e.g. survivor_492 or email" data-i18n-placeholder="login.userPlaceholder" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+              <label for="login-password" data-i18n="login.passLabel">Master Password</label>
+              <input type="password" id="login-password" class="form-input" placeholder="••••••••••••" data-i18n-placeholder="login.passPlaceholder" required autocomplete="current-password">
+              <div class="form-help" data-i18n="login.passHelp">Your password derives the local AES-256 key via PBKDF2 (600,000 rounds). It is never sent to the server.</div>
+            </div>
+
+            <div id="login-status-msg" class="status-feedback-msg"></div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <span data-i18n="login.btnSubmit">Unlock Vault Securely</span>
+            </button>
+          </form>
+
+          <div class="auth-footer-links">
+            <a href="#" id="link-to-register" class="link-accent" data-i18n="login.createVault">Create New Vault</a>
+            <a href="#" id="link-to-recover" class="link-subtle" data-i18n="login.useRecovery">Use 24-Word Recovery Phrase</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 2. REGISTRATION VIEW -->
+    <!-- ======================================================== -->
+    <section id="view-register" class="view-section">
+      <div class="auth-wrapper">
+        <div class="card glass-card">
+          <div class="auth-icon-header">
+            <div class="auth-icon-circle" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent);">🛡️</div>
+            <h1 class="card-title" data-i18n="reg.title">Create Private Evidence Vault</h1>
+            <p class="card-subtitle" data-i18n="reg.subtitle">Client-side zero-knowledge architecture. The server never sees your unencrypted evidence, keys, or passwords.</p>
+          </div>
+
+          <form id="form-register">
+            <div class="form-group">
+              <label for="reg-pseudonym" data-i18n="reg.userLabel">Choose a Pseudonym or Email</label>
+              <input type="text" id="reg-pseudonym" class="form-input" placeholder="e.g. anonymous_ally or secure email" data-i18n-placeholder="reg.userPlaceholder" required>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password" data-i18n="reg.passLabel">Master Password</label>
+              <input type="password" id="reg-password" class="form-input" placeholder="Minimum 10 characters" data-i18n-placeholder="reg.passPlaceholder" required minlength="10">
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password-confirm" data-i18n="reg.confirmLabel">Confirm Master Password</label>
+              <input type="password" id="reg-password-confirm" class="form-input" placeholder="Re-enter password" data-i18n-placeholder="reg.confirmPlaceholder" required minlength="10">
+              <div class="form-help" data-i18n="reg.passHelp">Keys are derived using PBKDF2 with 600,000 iterations to resist hardware brute-force attacks.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-stealth-dest" data-i18n="reg.stealthLabel">Stealth Escape Website (optional)</label>
+              <select id="reg-stealth-dest" class="form-select">
+                <option value="https://www.google.com" selected>Google Search (Default)</option>
+                <option value="https://en.wikipedia.org/wiki/Special:Random">Wikipedia Random Article</option>
+                <option value="https://weather.com">Weather.com Forecast</option>
+                <option value="https://www.ndtv.com">NDTV News</option>
+                <option value="https://www.bbc.com/news">BBC World News</option>
+                <option value="https://www.khanacademy.org">Khan Academy Courses</option>
+                <option value="custom">Custom URL…</option>
+              </select>
+              <input type="url" id="reg-stealth-custom-url" class="form-input" placeholder="https://example.com" style="display: none; margin-top: 8px;" data-i18n-placeholder="reg.stealthCustomPlaceholder">
+              <div class="form-help" data-i18n="reg.stealthHelp">If someone walks in, the vault instantly vanishes and this innocent website loads. You can change this later in Panic Settings.</div>
+            </div>
+
+            <div id="reg-status-msg" class="status-feedback-msg"></div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <span data-i18n="reg.btnSubmit">Generate Vault & Recovery Phrase</span>
+            </button>
+          </form>
+
+          <div class="auth-footer-links" style="justify-content: center;">
+            <a href="#" id="link-to-login" class="link-accent" data-i18n="reg.haveVault">Already have a vault? Log In</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 3. ACCOUNT RECOVERY VIEW (BIP-39) -->
+    <!-- ======================================================== -->
+    <section id="view-recover" class="view-section">
+      <div class="auth-wrapper">
+        <div class="card glass-card">
+          <div class="auth-icon-header">
+            <div class="auth-icon-circle" style="background: rgba(245, 158, 11, 0.15); color: var(--amber-warn);">📜</div>
+            <h1 class="card-title" data-i18n="recover.title">Recover Vault Access</h1>
+            <p class="card-subtitle" data-i18n="recover.subtitle">Enter your 24-word BIP-39 recovery phrase to reset your master credentials.</p>
+          </div>
+
+          <form id="form-recovery">
+            <div class="form-group">
+              <label for="recover-pseudonym" data-i18n="recover.userLabel">Account Pseudonym</label>
+              <input type="text" id="recover-pseudonym" class="form-input" required placeholder="Account pseudonym">
+            </div>
+
+            <div class="form-group">
+              <label for="recover-phrase" data-i18n="recover.phraseLabel">24-Word Recovery Phrase</label>
+              <textarea id="recover-phrase" class="form-input" rows="4" placeholder="Enter all 24 words separated by spaces..." data-i18n-placeholder="recover.phrasePlaceholder" required style="resize: vertical; font-family: var(--font-mono); font-size: 0.85rem;"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="recover-new-password" data-i18n="recover.newPassLabel">New Master Password</label>
+              <input type="password" id="recover-new-password" class="form-input" required minlength="10" placeholder="Minimum 10 characters" data-i18n-placeholder="recover.newPassPlaceholder">
+            </div>
+
+            <div id="recover-status-msg" class="status-feedback-msg"></div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <span data-i18n="recover.btnSubmit">Restore Vault & Reset Key</span>
+            </button>
+          </form>
+
+          <div class="auth-footer-links" style="justify-content: center;">
+            <a href="#" id="link-back-login" class="link-subtle" data-i18n="recover.backLogin">Back to Login</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 4. EVIDENCE VAULT DASHBOARD -->
+    <!-- ======================================================== -->
+    <section id="view-vault" class="view-section">
+      <!-- Defense-in-depth: Locked Barrier Overlay if unauthenticated -->
+      <div id="vault-locked-barrier" class="card glass-card" style="display: block; text-align: center; max-width: 600px; margin: 40px auto; padding: 48px 24px;">
+        <div style="font-size: 3.5rem; margin-bottom: 16px;">🔒</div>
+        <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; color: #fff;">Evidence Vault is Locked</h2>
+        <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto 24px; font-size: 0.95rem; line-height: 1.6;">
+          Your zero-knowledge evidence locker is protected by client-side AES-256 encryption. Log in to derive your cryptographic master key and view your evidence.
+        </p>
+        <button id="btn-vault-barrier-login" class="btn btn-primary" style="padding: 10px 28px; font-weight: 600;">
+          <span data-i18n="nav.unlockVault">🔑 Log In to Unlock Vault</span>
+        </button>
+      </div>
+
+      <!-- Authenticated Vault Contents -->
+      <div id="vault-authenticated-content" style="display: none;">
+        
+        <!-- Survivor Friendly 3-Step Quick Start Guide (Apple Card Style) -->
+        <div class="survivor-guide-card" id="survivor-guide-card">
+          <div class="guide-header">
+            <div class="guide-title-row">
+              <span class="guide-icon" aria-hidden="true">🌸</span>
+              <div>
+                <h2 class="guide-title" data-i18n="guide.title">Survivor Safe Start: 3 Simple Steps</h2>
+                <p class="guide-subtitle" data-i18n="guide.subtitle">How to turn threatening messages or photos into court-ready proof without technical knowledge.</p>
+              </div>
+            </div>
+            <button type="button" class="btn-guide-toggle" id="btn-toggle-guide" aria-label="Toggle Guide Visibility">
+              <span class="guide-toggle-label" id="guide-toggle-label">Hide</span>
+              <span class="guide-chevron" id="guide-chevron">▲</span>
+            </button>
+          </div>
+          <div class="guide-steps-grid" id="guide-steps-grid">
+            <div class="guide-step-card">
+              <div class="guide-step-badge">1</div>
+              <div class="guide-step-content">
+                <h3 data-i18n="guide.step1Title">Drop Evidence Below</h3>
+                <p data-i18n="guide.step1Desc">Upload screenshots, voice notes, or photos. We automatically erase your home address & GPS markers so you stay safe.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <div class="guide-step-badge">2</div>
+              <div class="guide-step-content">
+                <h3 data-i18n="guide.step2Title">Add What Happened</h3>
+                <p data-i18n="guide.step2Desc">Select the platform (WhatsApp, Instagram, etc.) and harasser details. Everything is locked with your password.</p>
+              </div>
+            </div>
+            <div class="guide-step-card">
+              <div class="guide-step-badge">3</div>
+              <div class="guide-step-content">
+                <h3 data-i18n="guide.step3Title">Download Court Package</h3>
+                <p data-i18n="guide.step3Desc">Tap "Export Court Package" to get an official signed PDF certificate ready for Cyber Cell (1930) or your lawyer.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vault Header & Stat Cards -->
+        <div class="vault-overview-header">
+          <div>
+            <h1 class="page-title" data-i18n="vault.title">Digital Evidence Vault</h1>
+            <p class="page-subtitle" data-i18n="vault.subtitle">
+              Encrypted with AES-256-GCM envelope encryption. Anchored with immutable SHA-256 chain-of-custody timestamps.
+            </p>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="vault-header-actions">
+            <button id="btn-run-vault-audit" class="btn btn-secondary" title="Verify all stored evidence hashes against backend custodial HMAC signatures">
+              <span data-i18n="vault.btnAudit">🛡️ Cryptographic Health Audit</span>
+            </button>
+            <button id="btn-export-case-dossier" class="btn btn-primary" title="Export entire case history as a comprehensive court legal package (.ZIP)">
+              <span data-i18n="vault.btnExport">📑 Export Full Case Dossier (.ZIP)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title" data-i18n="vault.statAnchored">Anchored Proof</span>
+              <span class="stat-card-icon">📁</span>
+            </div>
+            <div id="stat-evidence-count" class="stat-card-val">0</div>
+            <div class="stat-card-sub" data-i18n="vault.statAnchoredSub">Legally Timestamped</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title" data-i18n="vault.statZk">Zero-Knowledge</span>
+              <span class="stat-card-icon">🔐</span>
+            </div>
+            <div class="stat-card-val" style="color: var(--emerald-accent);">Active</div>
+            <div class="stat-card-sub" data-i18n="vault.statZkSub">AES-256-GCM Envelope</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title" data-i18n="vault.statSanitizer">Metadata Sanitizer</span>
+              <span class="stat-card-icon">🛡️</span>
+            </div>
+            <div class="stat-card-val" style="color: var(--teal-accent);">Guarded</div>
+            <div class="stat-card-sub" data-i18n="vault.statSanitizerSub">EXIF & GPS Stripped</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title" data-i18n="vault.statChain">Chain Health</span>
+              <span class="stat-card-icon">⚖️</span>
+            </div>
+            <div id="stat-custody-health" class="stat-card-val" style="color: var(--cyan-accent);">100%</div>
+            <div class="stat-card-sub" data-i18n="vault.statChainSub">Tamper-Proof Verified</div>
+          </div>
+        </div>
+
+        <!-- Evidence Dropzone & Ingestion Tools -->
+        <div class="ingestion-panel">
+          <div id="vault-dropzone" class="dropzone" tabindex="0">
+            <input type="file" id="evidence-file-input" style="display: none;" multiple>
+            <div class="dropzone-icon">📥</div>
+            <div class="dropzone-text" data-i18n="vault.dropzoneText">Drop screenshots, harassment audio, deepfake files, or documents here</div>
+            <div class="dropzone-hint" data-i18n="vault.dropzoneHint">
+              Supports single or batch upload. Files are automatically sanitized of hidden EXIF/GPS trackers, hashed via SHA-256, and AES-256 encrypted before leaving your browser.
+            </div>
+
+            <!-- Friendly Media Badges (Apple Capsule Style) -->
+            <div class="dropzone-pills-row" style="margin-top: 14px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+              <span class="dropzone-capsule-tag">📸 Screenshots & Photos</span>
+              <span class="dropzone-capsule-tag">🎙️ Audio & Voice Notes</span>
+              <span class="dropzone-capsule-tag">💬 WhatsApp & Chat Exports</span>
+              <span class="dropzone-capsule-tag">🤖 AI Deepfakes</span>
+            </div>
+
+            <div class="dropzone-actions" style="margin-top: 18px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button type="button" id="btn-browse-files" class="btn btn-primary" style="padding: 9px 20px;">
+                <span data-i18n="vault.browseFiles">📁 Browse Files to Anchor</span>
+              </button>
+              <button type="button" id="btn-open-evidence-helper" class="btn btn-secondary" style="padding: 9px 18px; background: rgba(0, 113, 227, 0.14); border-color: rgba(0, 113, 227, 0.32); color: #70b5ff;">
+                <span data-i18n="vault.helpWhatToSave">💡 What Evidence Should I Collect?</span>
+              </button>
+              <button type="button" id="btn-open-redactor" class="btn btn-secondary" style="padding: 9px 18px;">
+                <span data-i18n="vault.redactBtn">🖌️ Redact Sensitive Info Before Upload</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Upload Options Bar -->
+          <div class="upload-options-bar">
+            <label class="checkbox-label" title="Enable to prompt for incident categorization (stalking, deepfake, platform, notes) before anchoring">
+              <input type="checkbox" id="chk-prompt-tags" checked>
+              <span data-i18n="vault.promptTags">Prompt for incident tags & confidential notes before anchoring</span>
+            </label>
+            <span class="interaction-tip" data-i18n="vault.interactionTip">💡 Tip: <strong>Double-click</strong> any anchored card below to inspect decrypted details.</span>
+          </div>
+        </div>
+
+        <!-- Vault Filter & Search Controls -->
+        <div class="vault-controls-card">
+          <div class="search-box-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="vault-search-input" class="search-input" placeholder="Search evidence by filename, incident category, platform, perpetrator, or hash...">
+            <button id="btn-clear-search" class="btn-clear-search" style="display: none;">&times;</button>
+          </div>
+
+          <div class="filter-chips-container">
+            <button class="filter-chip active" data-filter="all">All Evidence</button>
+            <button class="filter-chip" data-filter="type-image">🖼️ Images</button>
+            <button class="filter-chip" data-filter="type-audio">🎵 Audio</button>
+            <button class="filter-chip" data-filter="type-doc">📄 Documents</button>
+            <button class="filter-chip" data-filter="cat-stalking">Cyberstalking</button>
+            <button class="filter-chip" data-filter="cat-deepfake">Deepfakes / AI</button>
+            <button class="filter-chip" data-filter="cat-harassment">Harassment</button>
+            <button class="filter-chip" data-filter="sev-critical">⚠️ Critical</button>
+          </div>
+
+          <div class="sort-selector-wrapper">
+            <label for="vault-sort-select" style="font-size: 0.8rem; color: var(--text-muted);">Sort By:</label>
+            <select id="vault-sort-select" class="form-select">
+              <option value="date-desc">Newest Anchored First</option>
+              <option value="date-asc">Oldest Anchored First</option>
+              <option value="name-asc">Filename (A-Z)</option>
+              <option value="size-desc">File Size (Largest)</option>
+              <option value="severity">Threat Severity</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Evidence Cards Grid -->
+        <div id="evidence-grid" class="evidence-grid">
+          <!-- Dynamically populated by App.loadUserEvidence() -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 5. FORENSIC WORKSTATION & CHAIN-OF-CUSTODY LEDGER VIEW  -->
+    <!-- ======================================================== -->
+    <section id="view-forensic" class="view-section">
+      <div class="verifier-banner forensic-page-banner">
+        <div class="verifier-badge" data-i18n="verifier.badge">COURTROOM & POLICE FORENSIC WORKSTATION</div>
+        <h1 style="font-size: 1.85rem; font-weight: 700; margin-top: 8px; color: #fff;">Forensic Evidence Ledger &amp; Custody Workstation</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 720px; margin: 8px auto 0;">
+          Authoritative cryptographic ledger, Section 65B (IEA) / Section 63 (BSA) statutory electronic certificates, SHA-256 integrity audits, and deepfake tamper analysis.
+        </p>
+      </div>
+
+      <!-- Forensic Quick Action Buttons -->
+      <div class="forensic-toolbar-row">
+        <button id="btn-forensic-anchor-evidence" class="btn btn-primary" title="Anchor new digital evidence with cryptographic chain-of-custody" data-i18n="forensic.btnAnchor">
+          📥 Ingest &amp; Anchor Evidence
+        </button>
+        <button id="btn-forensic-audit-run" class="btn btn-secondary" title="Verify all stored evidence hashes against backend custodial HMAC signatures">
+          🛡️ Run Vault Health Audit
+        </button>
+        <button id="btn-forensic-export-dossier" class="btn btn-primary" title="Export entire case history as certified legal ZIP">
+          📑 Export Master Legal Dossier (.ZIP)
+        </button>
+        <button id="btn-forensic-open-deepfake" class="btn btn-secondary" title="Launch ELA Deepfake Tampering Analyzer">
+          🔍 Deepfake Tamper Analysis
+        </button>
+      </div>
+
+      <!-- Authenticated Case Evidence Ledger Table -->
+      <div id="forensic-authenticated-ledger" style="display: none; margin-bottom: 32px;">
+        <!-- Forensic Evidence Ingestion Workstation Dropzone -->
+        <div class="forensic-dropzone-panel" style="margin-bottom: 24px;">
+          <div id="forensic-vault-dropzone" class="dropzone" tabindex="0">
+            <input type="file" id="forensic-file-input" style="display: none;" multiple>
+            <div class="dropzone-icon">📥</div>
+            <div class="dropzone-text" data-i18n="forensic.dropText">Drop Evidence Files to Ingest &amp; Anchor in Forensic Custody</div>
+            <div class="dropzone-hint" data-i18n="forensic.dropHint">
+              Automatic client-side EXIF/GPS scrubbing, SHA-256 bitstream fingerprinting, and zero-knowledge AES-256-GCM envelope encryption before custodial anchoring.
+            </div>
+
+            <!-- Forensic Media Badges (Apple Capsule Style) -->
+            <div class="dropzone-pills-row" style="margin-top: 14px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+              <span class="dropzone-capsule-tag">📸 Digital Photos &amp; Screenshots</span>
+              <span class="dropzone-capsule-tag">🎙️ Audio Recordings &amp; Calls</span>
+              <span class="dropzone-capsule-tag">💬 WhatsApp &amp; SMS Exports</span>
+              <span class="dropzone-capsule-tag">🤖 Deepfakes &amp; AI Media</span>
+              <span class="dropzone-capsule-tag">📄 Legal Documents &amp; PDFs</span>
+            </div>
+
+            <div class="dropzone-actions" style="margin-top: 18px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button type="button" id="btn-forensic-browse-files" class="btn btn-primary" style="padding: 9px 20px;">
+                <span data-i18n="forensic.browseFiles">📁 Browse Files to Anchor</span>
+              </button>
+              <button type="button" id="btn-forensic-open-redactor" class="btn btn-secondary" style="padding: 9px 18px;">
+                <span data-i18n="forensic.redactBtn">🖌️ Redact Before Ingesting</span>
+              </button>
+              <button type="button" id="btn-forensic-help-evidence" class="btn btn-secondary" style="padding: 9px 18px; background: rgba(0, 113, 227, 0.14); border-color: rgba(0, 113, 227, 0.32); color: #70b5ff;">
+                <span data-i18n="forensic.guideBtn">💡 Evidence Guide</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Forensic Upload Options Bar -->
+          <div class="upload-options-bar" style="margin-top: 10px;">
+            <label class="checkbox-label" title="Enable to prompt for incident categorization (stalking, deepfake, platform, notes) before anchoring">
+              <input type="checkbox" id="chk-forensic-prompt-tags" checked>
+              <span>Prompt for incident tags &amp; confidential notes before anchoring</span>
+            </label>
+            <span class="interaction-tip">💡 Tip: Ingested evidence instantly updates the Section 65B statutory ledger below.</span>
+          </div>
+        </div>
+
+        <div class="card glass-card" style="padding: 24px; overflow-x: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="color: #fff; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                <span>🗂️ Active Case Chain-of-Custody Ledger</span>
+                <span class="badge-custody" style="font-size: 0.72rem;">Live Cryptographic Ledger</span>
+              </h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
+                Every anchored file is preserved with an immutable server-authoritative timestamp and HMAC-SHA256 signature.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="text" id="forensic-table-search" class="form-input" placeholder="Search by name, category, or hash..." style="padding: 6px 12px; font-size: 0.82rem; width: 260px;">
+            </div>
+          </div>
+
+          <table class="forensic-table" id="forensic-ledger-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">#</th>
+                <th>File &amp; Format</th>
+                <th>Timestamp (UTC)</th>
+                <th>Category</th>
+                <th>SHA-256 Fingerprint</th>
+                <th>Custody Status</th>
+                <th style="text-align: right;">Forensic Actions</th>
+              </tr>
+            </thead>
+            <tbody id="forensic-ledger-tbody">
+              <!-- Dynamically populated by App.renderForensicLedgerTable() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Locked Ledger Notice for Unauthenticated Visitors -->
+      <div id="forensic-unauthenticated-notice" class="card glass-card" style="display: block; text-align: center; max-width: 680px; margin: 20px auto 36px; padding: 36px 24px;">
+        <div style="font-size: 2.4rem; margin-bottom: 12px;">🔒</div>
+        <h3 style="color: #fff; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Forensic Custody Ledger &amp; Ingestion Workstation is Locked</h3>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; max-width: 520px; margin: 0 auto 20px; line-height: 1.5;">
+          Your individual evidence chain-of-custody table and zero-knowledge encryption keys are protected. Unlock your vault to ingest new evidence, inspect live SHA-256 hashes, generate Section 65B certificates, and export certified case dossiers.
+        </p>
+        <button id="btn-forensic-unlock-vault" class="btn btn-primary" style="padding: 10px 24px;">
+          🔑 Unlock Vault to Ingest Evidence &amp; Inspect Ledger
+        </button>
+      </div>
+
+      <!-- Public SHA-256 Chain of Custody Verifier -->
+      <div style="max-width: 760px; margin: 0 auto;">
+        <div class="card glass-card" style="padding: 28px; margin-bottom: 28px;">
+          <h3 style="color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+            <span>⚖️ Public SHA-256 Integrity Verifier</span>
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+            Law enforcement, attorneys, and survivors can verify any file or hash against our cryptographic ledger.
+          </p>
+
+          <!-- File Drop Verifier -->
+          <div id="verifier-dropzone" class="dropzone" style="margin-bottom: 20px;">
+            <input type="file" id="verifier-file-input" style="display: none;">
+            <div class="dropzone-icon">⚖️</div>
+            <div class="dropzone-text" data-i18n="verifier.dropText">Drag & drop evidence file to verify cryptographic authenticity</div>
+            <div class="dropzone-hint" data-i18n="verifier.dropHint">Computes SHA-256 fingerprint in client memory and validates server HMAC custody seal.</div>
+            <div style="margin-top: 10px; font-size: 0.78rem; color: #a1a1aa;">
+              Looking to upload &amp; anchor new evidence instead? Use the <a href="#" id="link-jump-to-forensic-upload" style="color: var(--apple-blue); text-decoration: underline;">Ingestion Dropzone above</a>.
+            </div>
+            <button type="button" id="btn-verifier-select-file" class="btn btn-secondary" style="margin-top: 14px;">
+              <span data-i18n="verifier.selectBtn">Select File to Verify Against Ledger</span>
+            </button>
+          </div>
+
+          <div style="text-align: center; margin: 16px 0; color: var(--text-muted); font-size: 0.82rem; font-weight: 500;" data-i18n="verifier.orQuery">
+            — OR QUERY BY SHA-256 HASH STRING DIRECTLY —
+          </div>
+
+          <!-- Hash String Verifier -->
+          <form id="form-verifier-hash">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label for="verifier-hash-input" data-i18n="verifier.hashLabel">SHA-256 Hash String (64 hexadecimal characters)</label>
+              <input type="text" id="verifier-hash-input" class="form-input" placeholder="e.g. 8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4" data-i18n-placeholder="verifier.hashPlaceholder" required style="font-family: var(--font-mono); font-size: 0.85rem;">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <span data-i18n="verifier.btnQuery">Query Chain of Custody Ledger</span>
+            </button>
+          </form>
+
+          <!-- Dynamic Verification Results Box -->
+          <div id="verification-result-box" class="verification-result-box" style="margin-top: 18px;"></div>
+        </div>
+
+        <!-- Courtroom Admissibility Standards under Indian Law -->
+        <div class="card glass-card" style="padding: 24px; margin-bottom: 24px;">
+          <h4 style="color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span>📜 Statutory Admissibility Rules (Section 65B IEA &amp; Section 63 BSA)</span>
+          </h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; font-size: 0.82rem; color: var(--text-secondary);">
+            <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: #fff; display: block; margin-bottom: 4px;">1. Bitstream Original Integrity</strong>
+              SHA-256 hash matches the exact byte sequence anchored at time of custody, proving no subsequent deletion, compression, or modification.
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: #fff; display: block; margin-bottom: 4px;">2. Server-Authoritative Timestamps</strong>
+              Independent server-side UTC timestamps prevent harasser claims of local device clock manipulation or screenshot fabrication.
+            </div>
+            <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+              <strong style="color: #fff; display: block; margin-bottom: 4px;">3. Certified Electronic Certificate</strong>
+              One-click statutory Section 65B / Section 63 certificate with device parameters, custodial signature, and cryptographic hash digest.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- 6. HELPLINES & LEGAL DIRECTORY -->
+    <!-- ======================================================== -->
+    <section id="view-resources" class="view-section">
+      <div class="verifier-banner">
+        <div class="verifier-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent); border-color: rgba(16, 185, 129, 0.3);" data-i18n="res.badge">
+          EMERGENCY SUPPORT & LEGAL RESOURCES
+        </div>
+        <h2 data-i18n="res.title">Women's Cyber Safety & Emergency Helplines</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 650px; margin: 8px auto 0;" data-i18n="res.subtitle">
+          Verified national helplines, legal aid organizations, and forensic preservation guidelines for survivors of digital violence and cyber harassment.
+        </p>
+      </div>
+
+      <div class="resources-grid">
+        <!-- Resource Card 1 -->
+        <div class="resource-card">
+          <div class="resource-badge emergency">PRIMARY HOTLINE</div>
+          <div class="resource-icon">📞</div>
+          <h3 class="resource-title">National Cyber Crime Reporting Portal</h3>
+          <div class="resource-contact" data-i18n="res.call1930">Dial 1930 (Toll-Free 24x7)</div>
+          <p class="resource-desc">
+            Direct government helpline for reporting cyber crimes against women and children, cyber blackmail, and online fraud.
+          </p>
+          <div class="resource-action">
+            <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-block" data-i18n="res.visitPortal">Visit cybercrime.gov.in</a>
+          </div>
+        </div>
+
+        <!-- Resource Card 2 -->
+        <div class="resource-card">
+          <div class="resource-badge">WOMEN HELPLINE</div>
+          <div class="resource-icon">🛡️</div>
+          <h3 class="resource-title">National Commission for Women (NCW)</h3>
+          <div class="resource-contact" data-i18n="res.ncwHotline">7827170170 / Dial 1091</div>
+          <p class="resource-desc">
+            Dedicated NCW 24/7 helpline for women facing online abuse, stalking, deepfake extortion, and cyber bullying.
+          </p>
+          <div class="resource-action">
+            <a href="http://ncw.nic.in" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-block" data-i18n="res.visitNcw">Visit NCW Portal</a>
+          </div>
+        </div>
+
+        <!-- Resource Card 3 -->
+        <div class="resource-card">
+          <div class="resource-badge">IMAGE ABUSE DEFENSE</div>
+          <div class="resource-icon">🔒</div>
+          <h3 class="resource-title">StopNCII.org</h3>
+          <div class="resource-contact">Global Non-Consensual Image Removal</div>
+          <p class="resource-desc" data-i18n="res.stopNciiDesc">
+            Creates client-side perceptual hashes of intimate images so major platforms (Meta, TikTok, Reddit) can block them before they spread without you uploading the actual image.
+          </p>
+          <div class="resource-action">
+            <a href="https://stopncii.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-block" data-i18n="res.visitStopNcii">Visit StopNCII.org</a>
+          </div>
+        </div>
+
+        <!-- Resource Card 4 -->
+        <div class="resource-card">
+          <div class="resource-badge">YOUTH & DEEPFAKE PROTECTION</div>
+          <div class="resource-icon">🚫</div>
+          <h3 class="resource-title">Take It Down (NCMEC)</h3>
+          <div class="resource-contact">Under-18 Explicit Media Removal</div>
+          <p class="resource-desc">
+            Free service run by the National Center for Missing and Exploited Children to find and remove explicit images and deepfakes of minors from the web.
+          </p>
+          <div class="resource-action">
+            <a href="https://takeitdown.ncmec.org" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-block">Visit TakeItDown</a>
+          </div>
+        </div>
+
+        <!-- Resource Card 5: Legal Protocol -->
+        <div class="resource-card" style="grid-column: 1 / -1;">
+          <div class="resource-badge">LEGAL PRESERVATION PROTOCOL</div>
+          <h3 class="resource-title" style="margin-top: 8px;" data-i18n="res.rulesTitle">Forensic Evidence Rules for Court Admissibility</h3>
+          <div class="forensic-rules-list">
+            <div class="rule-item">
+              <span class="rule-num">1</span>
+              <div>
+                <strong data-i18n="res.rule1Title">Preserve Original Unaltered Files:</strong>
+                <span data-i18n="res.rule1Desc">Never edit original photos or video files directly. Anchor them here first to establish the authoritative cryptographic SHA-256 timestamp.</span>
+              </div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num">2</span>
+              <div>
+                <strong data-i18n="res.rule2Title">Capture Full Context:</strong>
+                <span data-i18n="res.rule2Desc">Capture screenshots showing URL address bars, sender account handles, phone numbers, and full date/time stamps.</span>
+              </div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num">3</span>
+              <div>
+                <strong data-i18n="res.rule3Title">Section 65B Compliance (Indian Evidence Act / BSA):</strong>
+                <span data-i18n="res.rule3Desc">Export the certified PDF Chain of Custody Report bundled with the original file when presenting evidence to law enforcement or legal counsel.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SURVIVOR EVIDENCE HELPER GUIDE (APPLE SHEET)      -->
+  <!-- ======================================================== -->
+  <div id="modal-evidence-helper" class="modal-overlay">
+    <div class="modal-content modal-apple-sheet" style="max-width: 760px;">
+      <button class="modal-close-btn" id="btn-close-helper-x" title="Close Guide (Esc)">&times;</button>
+      <div class="helper-modal-header">
+        <div class="helper-modal-icon" aria-hidden="true">💡</div>
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 4px;" data-i18n="helper.modalTitle">
+            Evidence Helper: What to Collect
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary);" data-i18n="helper.modalSubtitle">
+            Easy, non-technical steps to gather bulletproof proof of online harassment, cyberstalking, or deepfakes.
+          </p>
+        </div>
+      </div>
+
+      <div class="helper-reassurance-banner">
+        <span aria-hidden="true">🛡️</span>
+        <span data-i18n="helper.reassurance">Everything stays on your computer. Nothing is uploaded in public.</span>
+      </div>
+
+      <div class="helper-categories-grid">
+        <!-- Card 1: Chat apps -->
+        <div class="helper-card">
+          <div class="helper-card-icon" aria-hidden="true">💬</div>
+          <h3 class="helper-card-title" data-i18n="helper.catChat">WhatsApp / Telegram / Chat Messages</h3>
+          <ul class="helper-card-list">
+            <li><strong>Phone Number:</strong> Tap contact info at the top to display their real phone number or username handle, not just the saved name.</li>
+            <li><strong>Full Context:</strong> Screenshot the whole message thread showing full date and time stamps.</li>
+            <li><strong>Do Not Delete:</strong> Keep the conversation in your app until you have securely anchored screenshots here.</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Social media -->
+        <div class="helper-card">
+          <div class="helper-card-icon" aria-hidden="true">📸</div>
+          <h3 class="helper-card-title" data-i18n="helper.catSocial">Instagram / Facebook / X (Twitter)</h3>
+          <ul class="helper-card-list">
+            <li><strong>Profile Page:</strong> Always screenshot the suspect's main profile showing their account handle (@username), bio, and profile link.</li>
+            <li><strong>Web URL:</strong> If using a computer, include the browser address bar showing the full URL.</li>
+            <li><strong>Direct Messages & Comments:</strong> Screenshot threats, abusive comments, and story tags.</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Deepfakes & AI images -->
+        <div class="helper-card">
+          <div class="helper-card-icon" aria-hidden="true">🤖</div>
+          <h3 class="helper-card-title" data-i18n="helper.catDeepfake">Deepfakes / Morphing / AI Abuse</h3>
+          <ul class="helper-card-list">
+            <li><strong>Save Original:</strong> Save the file in the highest available quality without compressing or cropping it.</li>
+            <li><strong>Link Recording:</strong> Copy the exact web links or channel names where the media was shared.</li>
+            <li><strong>Proactive Block:</strong> Use StopNCII.org or TakeItDown to hash and stop viral distribution across Meta, Reddit, and TikTok.</li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Threatening calls -->
+        <div class="helper-card">
+          <div class="helper-card-icon" aria-hidden="true">📞</div>
+          <h3 class="helper-card-title" data-i18n="helper.catCalls">Threatening Phone Calls & Voicemails</h3>
+          <ul class="helper-card-list">
+            <li><strong>Call Log:</strong> Take screenshots of your phone’s incoming call history showing exact dates, times, and call duration.</li>
+            <li><strong>Audio Recordings:</strong> Save audio recordings or voicemails directly into this vault.</li>
+            <li><strong>1930 Helpline:</strong> Note down your complaint token number if you report to the cyber portal.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer-actions" style="margin-top: 22px;">
+        <button type="button" id="btn-close-helper" class="btn btn-primary" style="padding: 10px 24px;">
+          Got It, Back to My Vault
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: BIP-39 24-WORD RECOVERY PHRASE -->
+  <!-- ======================================================== -->
+  <div id="modal-mnemonic" class="modal-overlay">
+    <div class="modal-content" style="max-width: 660px;">
+      <h2 style="font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+        <span>🔑</span> Your 24-Word Recovery Phrase
+      </h2>
+      <p style="font-size: 0.88rem; color: var(--amber-warn); margin-bottom: 16px; line-height: 1.5;">
+        ⚠️ <strong>CRITICAL ZERO-KNOWLEDGE NOTICE:</strong> Because this platform is strictly zero-knowledge, the server cannot view or reset your password. If you forget your password, this phrase is the <strong>ONLY</strong> way to recover your vault and decrypt your evidence.
+      </p>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+        Write these 24 words down in order on a physical sheet of paper and store it in a secure location:
+      </p>
+
+      <div id="mnemonic-words-container" class="mnemonic-grid"></div>
+
+      <div style="margin: 14px 0 20px; display: flex; justify-content: flex-end;">
+        <button id="btn-copy-mnemonic" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 14px;">
+          📋 Copy Words to Clipboard
+        </button>
+      </div>
+
+      <div style="margin-bottom: 22px; display: flex; align-items: flex-start; gap: 10px;">
+        <input type="checkbox" id="chk-mnemonic-saved" style="margin-top: 4px; accent-color: var(--teal-accent);">
+        <label for="chk-mnemonic-saved" style="font-size: 0.85rem; color: var(--text-primary); cursor: pointer; line-height: 1.4;">
+          I have written down or safely preserved my 24-word recovery phrase offline. I understand that without this phrase, lost passwords cannot be recovered.
+        </label>
+      </div>
+
+      <button id="btn-confirm-mnemonic" class="btn btn-primary btn-block">
+        I Saved My Recovery Phrase — Enter Vault
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: 4-STAGE PIPELINE PROGRESS -->
+  <!-- ======================================================== -->
+  <div id="modal-pipeline" class="modal-overlay">
+    <div class="modal-content" style="max-width: 580px;">
+      <h2 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+        <span>🔒</span> Processing Evidence Custody Pipeline
+      </h2>
+      <p id="pipeline-subtitle" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px;">
+        Executing client-side cryptographic sanitization, hashing, and encryption...
+      </p>
+
+      <div class="pipeline-progress">
+        <div id="pipeline-step-1" class="pipeline-step active">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <div class="step-label">EXIF & GPS Strip</div>
+            <div id="step-1-status" class="step-status">Inspecting binary headers...</div>
+          </div>
+        </div>
+
+        <div id="pipeline-step-2" class="pipeline-step">
+          <div class="step-num">2</div>
+          <div class="step-info">
+            <div class="step-label">SHA-256 Fingerprint</div>
+            <div id="step-2-status" class="step-status">Waiting...</div>
+          </div>
+        </div>
+
+        <div id="pipeline-step-3" class="pipeline-step">
+          <div class="step-num">3</div>
+          <div class="step-info">
+            <div class="step-label">AES-256 Envelope Encryption</div>
+            <div id="step-3-status" class="step-status">Waiting...</div>
+          </div>
+        </div>
+
+        <div id="pipeline-step-4" class="pipeline-step">
+          <div class="step-num">4</div>
+          <div class="step-info">
+            <div class="step-label">Custody Seal & Timestamp</div>
+            <div id="step-4-status" class="step-status">Waiting...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: DECRYPTED EVIDENCE INSPECTOR & MULTI-MEDIA VIEWER -->
+  <!-- ======================================================== -->
+  <div id="modal-preview" class="modal-overlay">
+    <div class="modal-content" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close-btn" title="Close Preview (or press Esc)">&times;</button>
+      
+      <div class="preview-header">
+        <div>
+          <h2 id="preview-file-title" style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+            Evidence Inspector
+          </h2>
+          <div style="font-size: 0.82rem; color: var(--teal-accent); display: flex; align-items: center; gap: 8px;">
+            <span>✓ Decrypted In-Memory</span>
+            <span>•</span>
+            <span>Bit-Level Integrity Verified</span>
+            <span>•</span>
+            <span id="preview-sanitized-badge" style="color: var(--cyan-accent);">Sanitized</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forensic Tools Quick Bar -->
+      <div class="preview-tools-bar" style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+        <button id="btn-preview-deepfake" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px; display: none;">
+          🔍 Error Level (ELA) Tamper Analysis
+        </button>
+        <button id="btn-preview-cert65b" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
+          📜 Section 65B/BSA Certificate (PDF)
+        </button>
+        <button id="btn-preview-fir-complaint" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
+          📝 File Cybercrime FIR Petition
+        </button>
+      </div>
+
+      <!-- Decrypted Media Content (Image, Audio, or Text viewer) -->
+      <div id="preview-content-container" class="preview-container"></div>
+
+      <!-- Metadata & Forensic Inspector Panel -->
+      <div class="preview-inspector-panel">
+        <!-- Plain-Language Summary for Non-Tech Users & Survivors -->
+        <div class="inspector-plain-summary" id="inspector-plain-summary">
+          <div class="plain-summary-card">
+            <div class="plain-summary-item">
+              <span class="plain-summary-icon" aria-hidden="true">⚖️</span>
+              <div>
+                <strong style="color: #fff; font-size: 0.88rem;">Court Admissibility Guaranteed:</strong>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+                  This file was digitally hashed on this device and anchored with an authoritative server timestamp. It provides tamper-proof Section 65B/BSA electronic evidence for police or court.
+                </p>
+              </div>
+            </div>
+            <div class="plain-summary-item" style="margin-top: 10px;">
+              <span class="plain-summary-icon" aria-hidden="true">🛡️</span>
+              <div>
+                <strong style="color: #fff; font-size: 0.88rem;">Survivor Privacy Preserved:</strong>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+                  All camera tags, phone identifiers, and home GPS coordinates were purged. Decryption occurs entirely in local browser memory.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 14px 0 10px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="font-size: 0.92rem; font-weight: 600; color: #fff; margin: 0; display: flex; align-items: center; gap: 6px;">
+            <span>📋</span> Incident Record & Custody Seal
+          </h3>
+          <button type="button" class="btn-toggle-tech-details" id="btn-toggle-tech-details">
+            <span id="tech-details-btn-text">Show Technical Hash & Seal</span>
+          </button>
+        </div>
+
+        <div class="inspector-grid">
+          <div class="inspector-item">
+            <span class="inspector-label">SHA-256 Fingerprint:</span>
+            <div class="inspector-val-copyable">
+              <span id="preview-hash-val" class="font-mono">...</span>
+              <button id="btn-copy-preview-hash" class="btn-mini-copy" title="Copy SHA-256">Copy</button>
+            </div>
+          </div>
+
+          <div class="inspector-item">
+            <span class="inspector-label">Custodial Timestamp:</span>
+            <span id="preview-timestamp-val" class="inspector-val">...</span>
+          </div>
+
+          <div class="inspector-item">
+            <span class="inspector-label">Incident Classification:</span>
+            <span id="preview-category-val" class="inspector-val">...</span>
+          </div>
+
+          <div class="inspector-item">
+            <span class="inspector-label">Platform & Suspect:</span>
+            <span id="preview-platform-val" class="inspector-val">...</span>
+          </div>
+
+          <div class="inspector-item" style="grid-column: 1 / -1;">
+            <span class="inspector-label">Confidential Incident Notes:</span>
+            <p id="preview-notes-val" class="inspector-val-notes">None recorded.</p>
+          </div>
+
+          <div class="inspector-item" style="grid-column: 1 / -1;">
+            <span class="inspector-label">Custodian Digital Seal:</span>
+            <span id="preview-custodian-seal" class="font-mono inspector-seal">...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Bottom Actions -->
+      <div class="modal-footer-actions">
+        <button id="btn-preview-export-bundle" class="btn btn-primary">
+          📦 Export Legal Bundle (.ZIP + Signed PDF)
+        </button>
+        <button id="btn-preview-close" class="btn btn-secondary">
+          Close Inspector
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: INCIDENT METADATA & CATEGORIZATION EDITOR -->
+  <!-- ======================================================== -->
+  <div id="modal-tag-incident" class="modal-overlay">
+    <div class="modal-content" style="max-width: 620px;">
+      <button class="modal-close-btn">&times;</button>
+      <h2 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+        <span>🏷️</span> Forensic Incident Classification
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+        Adding structured metadata strengthens legal admissibility in court and police investigations. All notes are encrypted client-side.
+      </p>
+
+      <form id="form-incident-tags">
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="tag-category">Incident Category</label>
+            <select id="tag-category" class="form-select" required>
+              <option value="Cyberstalking & Tracking">Cyberstalking & Tracking</option>
+              <option value="Deepfake / AI Synthetic Abuse">Deepfake / AI Synthetic Abuse</option>
+              <option value="Non-Consensual Imagery">Non-Consensual Imagery</option>
+              <option value="Blackmail & Extortion">Blackmail & Extortion</option>
+              <option value="Doxxing & Online Harassment">Doxxing & Online Harassment</option>
+              <option value="Impersonation & Defamation">Impersonation & Defamation</option>
+              <option value="Threatening Audio/Messages">Threatening Audio/Messages</option>
+              <option value="Other Evidence">Other Digital Evidence</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tag-severity">Threat Severity</label>
+            <select id="tag-severity" class="form-select">
+              <option value="Critical">Critical (Immediate Danger)</option>
+              <option value="High" selected>High (Sustained Harassment)</option>
+              <option value="Medium">Medium (Concerning Activity)</option>
+              <option value="Low">Low (Archival / Context)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="tag-platform">Origin Platform</label>
+            <select id="tag-platform" class="form-select">
+              <option value="Instagram">Instagram</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Telegram">Telegram</option>
+              <option value="X / Twitter">X / Twitter</option>
+              <option value="Discord">Discord</option>
+              <option value="Snapchat">Snapchat</option>
+              <option value="Email">Email</option>
+              <option value="SMS / Call">SMS / Phone Call</option>
+              <option value="Dating App">Dating App</option>
+              <option value="Other">Other Website/Platform</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tag-perpetrator">Perpetrator Identifier</label>
+            <input type="text" id="tag-perpetrator" class="form-input" placeholder="e.g. @suspect_handle or phone">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tag-incident-time">Approximate Incident Date & Time</label>
+          <input type="datetime-local" id="tag-incident-time" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="tag-notes">Confidential Incident Notes (Encrypted In-Memory)</label>
+          <textarea id="tag-notes" class="form-input" rows="3" placeholder="Context of harassment, threats made, witness info, or police FIR reference..."></textarea>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" id="btn-cancel-tags" class="btn btn-secondary">Skip / Keep Defaults</button>
+          <button type="submit" class="btn btn-primary">Save & Anchor Evidence</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CLIENT-SIDE PRIVACY CANVAS REDACTOR -->
+  <!-- ======================================================== -->
+  <div id="modal-redactor" class="modal-overlay">
+    <div class="modal-content" style="max-width: 900px; max-height: 92vh; overflow-y: auto;">
+      <button class="modal-close-btn">&times;</button>
+      
+      <div style="margin-bottom: 14px;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+          <span>🖌️</span> Privacy Redaction Tool
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Black out your private home address, phone numbers, face, or bank accounts before cryptographic anchoring.
+        </p>
+      </div>
+
+      <!-- Redactor Toolbar -->
+      <div class="redactor-toolbar">
+        <button id="btn-redact-select-file" class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 12px;">
+          📁 Choose Image
+        </button>
+        <div class="redactor-mode-pill">
+          <span>Mode: <strong>Blackout Box Redaction</strong></span>
+        </div>
+        <button id="btn-redact-undo" class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 12px;" disabled>
+          ↩️ Undo Box
+        </button>
+        <button id="btn-redact-clear" class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 12px;">
+          🗑️ Clear All
+        </button>
+      </div>
+
+      <!-- Canvas Workspace -->
+      <div class="canvas-workspace">
+        <canvas id="redaction-canvas"></canvas>
+        <div id="redactor-placeholder" class="canvas-placeholder">
+          <span style="font-size: 2.4rem;">🖼️</span>
+          <p style="margin-top: 8px;">No image selected yet</p>
+          <button type="button" class="btn btn-primary" style="margin-top: 12px;" onclick="document.getElementById('redact-file-input').click()">
+            Upload Image to Redact
+          </button>
+          <input type="file" id="redact-file-input" accept="image/*" style="display: none;">
+        </div>
+      </div>
+
+      <div class="modal-footer-actions">
+        <button id="btn-close-redactor" class="btn btn-secondary">Cancel</button>
+        <button id="btn-apply-redaction-and-anchor" class="btn btn-primary" disabled>
+          ✓ Apply Redactions & Proceed to Anchor
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: VAULT CRYPTOGRAPHIC INTEGRITY AUDIT -->
+  <!-- ======================================================== -->
+  <div id="modal-audit" class="modal-overlay">
+    <div class="modal-content" style="max-width: 680px;">
+      <button class="modal-close-btn">&times;</button>
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+        <span>🛡️</span> Vault Cryptographic Integrity Audit
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+        Performing a live, client-side integrity validation across all anchored evidence records and verifying digital HMAC custodian seals.
+      </p>
+
+      <div id="audit-progress-bar-container" class="audit-progress-container">
+        <div id="audit-progress-bar" class="audit-progress-bar" style="width: 0%;"></div>
+      </div>
+
+      <div id="audit-status-summary" style="margin: 16px 0; font-size: 0.88rem; color: var(--cyan-accent);">
+        Initializing cryptographic audit engine...
+      </div>
+
+      <div id="audit-results-list" class="audit-results-list"></div>
+
+      <div class="modal-footer-actions">
+        <button id="btn-close-audit" class="btn btn-primary" style="display: none;">
+          Audit Complete — Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: PANIC & DOUBLE-CLICK PREFERENCES -->
+  <!-- ======================================================== -->
+  <div id="modal-panic-settings" class="modal-overlay">
+    <div class="modal-content" style="max-width: 580px;">
+      <button class="modal-close-btn">&times;</button>
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+        <span>⚙️</span> Survivor Safety & Panic Preferences
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+        Configure how emergency escape gestures operate to keep you safe from perpetrators.
+      </p>
+
+      <form id="form-panic-settings">
+        <!-- Setting 1: Destination -->
+        <div class="form-group">
+          <label for="panic-dest-select">Emergency Escape Destination</label>
+          <select id="panic-dest-select" class="form-select">
+            <option value="https://www.google.com" selected>Google Search (Default Camouflage)</option>
+            <option value="https://en.wikipedia.org/wiki/Special:Random">Wikipedia Random Article</option>
+            <option value="https://weather.com">Weather.com Forecast</option>
+            <option value="https://www.ndtv.com">NDTV News</option>
+            <option value="https://www.bbc.com/news">BBC World News</option>
+            <option value="https://www.khanacademy.org">Khan Academy Courses</option>
+            <option value="custom">Custom URL…</option>
+          </select>
+          <input type="url" id="panic-dest-custom-url" class="form-input" placeholder="https://example.com" style="display: none; margin-top: 8px;">
+          <div class="form-help">Where your browser redirects instantaneously in 0 milliseconds when panic is triggered.</div>
+        </div>
+
+        <!-- Setting 2: Double-click background toggle -->
+        <div class="settings-toggle-card">
+          <div>
+            <strong>Double-Click Anywhere Panic Exit</strong>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              When ON: Double-clicking anywhere on empty background triggers instant escape.<br>
+              When OFF (Recommended): Emergency exit triggers on the Red Safety Bar, Quick Exit button, Floating Shield, or Double ESC.
+            </p>
+          </div>
+          <input type="checkbox" id="chk-panic-bg-dblclick" class="toggle-checkbox">
+        </div>
+
+        <!-- Setting 3: Floating Shield toggle -->
+        <div class="settings-toggle-card">
+          <div>
+            <strong>Floating Discreet Panic Shield</strong>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Displays a discreet emergency exit shield button floating at the bottom right corner of the screen.
+            </p>
+          </div>
+          <input type="checkbox" id="chk-floating-panic" class="toggle-checkbox" checked>
+        </div>
+
+        <!-- Setting 4: Zero-Trace Auto-Lock Inactivity Timeout -->
+        <div class="form-group" style="margin-top: 14px;">
+          <label for="panic-autolock-select">Zero-Trace Vault Inactivity Auto-Lock</label>
+          <select id="panic-autolock-select" class="form-select">
+            <option value="60">1 minute (High Security)</option>
+            <option value="180" selected>3 minutes (Recommended)</option>
+            <option value="300">5 minutes</option>
+            <option value="600">10 minutes</option>
+            <option value="0">Disabled (Manual Lock Only)</option>
+          </select>
+          <div class="form-help">Automatically purges master keys from browser memory if device is left idle.</div>
+        </div>
+
+        <div class="panic-shortcuts-reference">
+          <h4 style="font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 6px;">Active Emergency Triggers:</h4>
+          <ul style="font-size: 0.8rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.6;">
+            <li><strong>Double-click</strong> anywhere on the top Red Safety Banner</li>
+            <li><strong>Double-click</strong> or click the red "⚠️ Quick Exit" button</li>
+            <li><strong>Double-press the ESC key</strong> (when no modal dialog is open)</li>
+            <li><strong>Double-click</strong> an evidence card to inspect (does not trigger exit)</li>
+          </ul>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="submit" class="btn btn-primary btn-block">Save Preferences</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: DEEPFAKE & SYNTHETIC IMAGE ELA TAMPER ANALYZER    -->
+  <!-- ======================================================== -->
+  <div id="modal-deepfake-analyzer" class="modal-overlay">
+    <div class="modal-content" style="max-width: 920px; max-height: 92vh; overflow-y: auto;">
+      <button class="modal-close-btn">&times;</button>
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+        <span>🔍</span> Deepfake & Image Tamper ELA Inspector
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+        Client-side Error Level Analysis (ELA) analyzes JPEG quantization differences. Spliced elements, pasted text, or AI face-swaps compress at different error rates than the original image background.
+      </p>
+
+      <div class="ela-controls-bar" style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px; background: rgba(255, 255, 255, 0.04); padding: 10px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-card); flex-wrap: wrap;">
+        <label for="ela-scale-slider" style="font-size: 0.82rem; color: #fff; font-weight: 600;">ELA Enhancement Scale:</label>
+        <input type="range" id="ela-scale-slider" min="10" max="40" value="20" step="5" style="accent-color: var(--teal-accent); cursor: pointer;">
+        <span id="ela-scale-val" style="font-size: 0.82rem; color: var(--teal-accent); font-family: var(--font-mono); font-weight: 700;">20x</span>
+        <button id="btn-recompute-ela" class="btn btn-secondary" style="font-size: 0.78rem; padding: 4px 12px; margin-left: auto;">
+          🔄 Recalculate
+        </button>
+      </div>
+
+      <div class="ela-comparison-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div>
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">
+            Original Decrypted Evidence
+          </div>
+          <div class="canvas-workspace" style="min-height: 280px; max-height: 380px;">
+            <img id="ela-orig-img" style="max-width: 100%; max-height: 360px; object-fit: contain;">
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 0.8rem; font-weight: 600; color: var(--teal-accent); margin-bottom: 6px; text-transform: uppercase;">
+            Error Level Analysis (ELA) Noise Variance
+          </div>
+          <div class="canvas-workspace" style="min-height: 280px; max-height: 380px;">
+            <canvas id="ela-result-canvas" style="max-width: 100%; max-height: 360px; display: block;"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- ELA Forensic Reading Guidance -->
+      <div class="ela-guidance-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-card); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 18px;">
+        <h4 style="font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <span>📋</span> Forensic Interpretation Guide:
+        </h4>
+        <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+          • <strong>Uniform Noise Level:</strong> If all edges and textures in the image have similar brightness in the ELA window, the image has consistent compression history.<br>
+          • <strong>Glowing Spliced Edges:</strong> If a face, text, or figure glows substantially brighter than the background, it was edited or saved at a higher quality than the rest of the image (strong indicator of tampering / deepfake insertion).
+        </div>
+      </div>
+
+      <div class="modal-footer-actions">
+        <button id="btn-close-ela" class="btn btn-secondary">Close Inspector</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: POLICE FIR & CYBER CRIME COMPLAINT GENERATOR      -->
+  <!-- ======================================================== -->
+  <div id="modal-fir-generator" class="modal-overlay">
+    <div class="modal-content" style="max-width: 680px;">
+      <button class="modal-close-btn">&times;</button>
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+        <span>📝</span> Cyber Crime FIR Complaint Generator
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
+        Prepares a formal written complaint letter citing applicable IT Act and BNS/IPC sections for filing at a Cyber Crime Police Station or uploading to the 1930 portal.
+      </p>
+
+      <form id="form-fir-complaint">
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="fir-complainant-name">Complainant Name / Pseudonym</label>
+            <input type="text" id="fir-complainant-name" class="form-input" placeholder="e.g. Survivor or Real Name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="fir-police-station">Cyber Cell / Police Station</label>
+            <input type="text" id="fir-police-station" class="form-input" placeholder="e.g. Cyber Crime Cell, New Delhi / 1930 Portal" required>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="fir-suspect-handle">Suspect Identifier / Account Handle</label>
+            <input type="text" id="fir-suspect-handle" class="form-input" placeholder="e.g. @suspect_user or phone">
+          </div>
+
+          <div class="form-group">
+            <label for="fir-contact-details">Confidential Contact Phone / Email</label>
+            <input type="text" id="fir-contact-details" class="form-input" placeholder="Phone or email for police correspondence">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fir-incident-summary">Statement of Facts & Harassment Details</label>
+          <textarea id="fir-incident-summary" class="form-input" rows="4" placeholder="Describe the threats, stalking messages, deepfake creation, or extortion demands in chronological order..."></textarea>
+        </div>
+
+        <div style="background: rgba(0, 113, 227, 0.1); border: 1px solid rgba(0, 113, 227, 0.25); border-radius: var(--radius-xs); padding: 12px; margin-bottom: 18px; font-size: 0.8rem; color: #70b5ff;">
+          🛡️ The generated document automatically embeds the cryptographic SHA-256 fingerprint, server custody timestamp, and statutory Section 65B compliance clauses.
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" id="btn-cancel-fir" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            📄 Generate & Download Official FIR Petition (PDF)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- ======================================================== -->
+  <!-- INSTANT ZERO-LATENCY GOOGLE CAMOUFLAGE CLOAK -->
+  <!-- ======================================================== -->
+  <div id="instant-google-cloak" style="display: none; position: fixed; inset: 0; background: #ffffff; z-index: 9999999; flex-direction: column; align-items: center; justify-content: center; font-family: Roboto, arial, sans-serif; color: #202124;">
+    <div style="margin-bottom: 28px;">
+      <svg height="92" viewBox="0 0 272 92" width="272"><path d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#ea4335"/><path d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z" fill="#fbbc05"/><path d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 8.15 11.18 8.15 7.28 0 11.8-4.47 11.8-12.87v-3.23h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.48zm-8.83 21.09c0-7.81-5.21-13.62-11.93-13.62-6.8 0-12.51 5.8-12.51 13.62 0 7.73 5.71 13.36 12.51 13.36 6.72 0 11.93-5.63 11.93-13.36z" fill="#4285f4"/><path d="M225 3v65h-9.5V3h9.5z" fill="#34a853"/><path d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-13.52-8.07l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z" fill="#ea4335"/><path d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.79.36 34.85.36 15.91 16.32.35 35.3.35c9.75 0 17.06 3.86 22.35 8.82l-6.38 6.38c-3.86-3.61-9.07-6.47-15.97-6.47-14.45 0-25.79 11.68-25.79 25.79s11.34 25.79 25.79 25.79c9.32 0 14.62-3.74 18.06-7.18 2.77-2.77 4.62-6.72 5.38-12.27H35.29z" fill="#4285f4"/></svg>
+    </div>
+    <form action="https://www.google.com/search" method="GET" style="width: 100%; max-width: 584px; display: flex; flex-direction: column; align-items: center;">
+      <div style="width: 100%; border: 1px solid #dfe1e5; border-radius: 24px; padding: 12px 18px; display: flex; align-items: center; box-shadow: 0 1px 6px rgba(32,33,36,.28);">
+        <svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#9aa0a6"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+        <input type="text" name="q" style="width: 100%; border: none; outline: none; margin-left: 12px; font-size: 16px;" value="" autofocus>
+      </div>
+      <div style="margin-top: 28px; display: flex; gap: 12px;">
+        <button type="submit" style="background: #f8f9fa; border: 1px solid #f8f9fa; border-radius: 4px; color: #3c4043; font-size: 14px; padding: 8px 16px; cursor: pointer;">Google Search</button>
+        <button type="button" onclick="window.location.replace('https://www.google.com')" style="background: #f8f9fa; border: 1px solid #f8f9fa; border-radius: 4px; color: #3c4043; font-size: 14px; padding: 8px 16px; cursor: pointer;">I'm Feeling Lucky</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- FLOATING DISCREET PANIC SHIELD (BOTTOM RIGHT) -->
+  <button id="floating-panic-shield" class="floating-panic-shield" title="Emergency Quick Exit (Double-click or click to escape)">
+    <span>⚠️</span>
+    <span class="panic-shield-label">Panic Exit</span>
+  </button>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Vendor Scripts (Local & Air-Gapped) -->
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="vendor/jszip.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/bip39-words.js"></script>
+  <script src="js/crypto.js"></script>
+  <script src="js/sanitizer.js"></script>
+  <script src="js/report.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
