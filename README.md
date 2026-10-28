@@ -2,6 +2,8 @@
 
 > **A zero-knowledge, forensic-grade digital evidence custody platform for survivors of cyber harassment, deepfake abuse, and online stalking.**
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/cyber-spy-404/womens-cyber-safety-vault)
+
 ---
 
 ## 🛡️ Core Security Architecture
@@ -65,6 +67,27 @@
    ```
    http://localhost:3000
    ```
+
+---
+
+## ☁️ Cloud Deployment (Render Blueprint)
+
+This project contains a turnkey **Render Blueprint** ([render.yaml](file:///d:/Projects/Cybersecurity%20Women's%20Cyber%20Safety%20Project/render.yaml)) and `.node-version` (Node 22 LTS for native `node:sqlite`).
+
+### 1-Click Deployment
+1. Push your repository to GitHub.
+2. In the [Render Dashboard](https://dashboard.render.com), click **New +** > **Blueprint**.
+3. Select your `womens-cyber-safety-vault` repository.
+4. Render will automatically read [render.yaml](file:///d:/Projects/Cybersecurity%20Women's%20Cyber%20Safety%20Project/render.yaml), generate cryptographically secure secrets (`CUSTODIAN_SECRET`, `JWT_SECRET`), provision the Node.js 22 container, and perform automated zero-downtime healthchecks via `/api/health`.
+
+### Environment Configuration
+| Variable | Description | Default / Provisioning |
+| :--- | :--- | :--- |
+| `NODE_VERSION` | Node.js engine version (>= 22.5.0 required for `node:sqlite`) | `22.14.0` |
+| `NODE_ENV` | Production environment flag | `production` |
+| `CUSTODIAN_SECRET` | 256-bit HMAC secret for legal chain-of-custody seals | `generateValue: true` |
+| `JWT_SECRET` | Token signing secret for survivor vault sessions | `generateValue: true` |
+| `DATA_DIR` | Storage mount path (optional; for persistent disks) | `./server` |
 
 ---
 

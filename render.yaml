@@ -1,0 +1,46 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Render Blueprint Specification (render.yaml)
+# Project: Zero-Knowledge Women's Cyber Safety Vault & Forensic Evidence Workstation
+# Author: cyber-spy-404
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  - type: web
+    name: womens-cyber-safety-vault
+    runtime: node
+    plan: free
+    region: oregon # or frankfurt / singapore / ohio
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+    envVars:
+      # Node.js 22 LTS required for native node:sqlite engine
+      - key: NODE_VERSION
+        value: 22.14.0
+
+      - key: NODE_ENV
+        value: production
+
+      # Auto-generated cryptographic secrets (persistent across redeploys)
+      - key: CUSTODIAN_SECRET
+        generateValue: true
+
+      - key: JWT_SECRET
+        generateValue: true
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # PERSISTENT STORAGE (Optional for Starter Plan or higher):
+    # Free tier containers have ephemeral filesystems. If you upgrade to
+    # Render Starter ($7/mo) and want persistent physical storage for the SQLite
+    # database and encrypted vault blobs, uncomment the disk block below:
+    # ─────────────────────────────────────────────────────────────────────────
+    # disk:
+    #   name: vault-storage
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # envVars:
+    #   - key: DATA_DIR
+    #     value: /var/data

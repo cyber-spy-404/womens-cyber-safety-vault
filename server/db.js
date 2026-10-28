@@ -2,7 +2,11 @@ const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
 
-const DB_PATH = path.join(__dirname, 'evidence_locker.db');
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+const DB_PATH = process.env.DB_PATH || path.join(DATA_DIR, 'evidence_locker.db');
 const db = new DatabaseSync(DB_PATH);
 
 // Enable WAL mode and foreign keys for high performance and integrity

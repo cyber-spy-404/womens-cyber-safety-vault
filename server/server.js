@@ -12,20 +12,30 @@ const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const VAULT_DIR = path.join(__dirname, 'vault');
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+const VAULT_DIR = process.env.VAULT_DIR || path.join(DATA_DIR, 'vault');
 
 if (!fs.existsSync(VAULT_DIR)) {
   fs.mkdirSync(VAULT_DIR, { recursive: true });
 }
 
 // Persistent Custodian Authority Key for digital chain-of-custody seals
-const KEY_FILE = path.join(__dirname, '.custodian_key');
-let CUSTODIAN_SECRET;
-if (fs.existsSync(KEY_FILE)) {
-  CUSTODIAN_SECRET = fs.readFileSync(KEY_FILE, 'utf8').trim();
-} else {
-  CUSTODIAN_SECRET = crypto.randomBytes(32).toString('hex');
-  fs.writeFileSync(KEY_FILE, CUSTODIAN_SECRET, { mode: 0o600 });
+const KEY_FILE = process.env.KEY_FILE || path.join(DATA_DIR, '.custodian_key');
+let CUSTODIAN_SECRET = process.env.CUSTODIAN_SECRET;
+if (!CUSTODIAN_SECRET) {
+  if (fs.existsSync(KEY_FILE)) {
+    CUSTODIAN_SECRET = fs.readFileSync(KEY_FILE, 'utf8').trim();
+  } else {
+    CUSTODIAN_SECRET = crypto.randomBytes(32).toString('hex');
+    try {
+      fs.writeFileSync(KEY_FILE, CUSTODIAN_SECRET, { mode: 0o600 });
+    } catch (e) {
+      console.warn('[Custodian] Notice: using ephemeral key; configure CUSTODIAN_SECRET env for persistence.');
+    }
+  }
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || CUSTODIAN_SECRET;
@@ -103,6 +113,16 @@ app.use((req, res, next) => {
 
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Healthcheck endpoint for Render / load balancers
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+    node_version: process.version
+  });
+});
 
 // ── Multer Configuration ───────────────────────────────
 const ALLOWED_MIME_TYPES = new Set([
