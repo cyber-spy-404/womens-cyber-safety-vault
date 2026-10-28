@@ -557,22 +557,32 @@ const App = {
     // Public Verifier Form & Dropzone
     const verifierDropzone = document.getElementById('verifier-dropzone');
     const verifierFileInput = document.getElementById('verifier-file-input');
-    const btnVerifierSelect = document.getElementById('btn-verifier-select-file');
     const formVerifierHash = document.getElementById('form-verifier-hash');
 
-    if (btnVerifierSelect && verifierFileInput) {
-      btnVerifierSelect.addEventListener('click', (e) => {
-        e.stopPropagation();
-        verifierFileInput.click();
+    if (verifierFileInput) {
+      verifierFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          const f = e.target.files[0];
+          this.handlePublicFileVerification(f);
+        }
       });
     }
 
     if (verifierDropzone && verifierFileInput) {
+      // Whole surface click triggers file chooser unless clicking a child link or label
       verifierDropzone.addEventListener('click', (e) => {
-        if (!e.target.closest('button, a, input')) {
+        if (e.target.closest('a, label, input')) return;
+        verifierFileInput.click();
+      });
+
+      // Keyboard accessibility
+      verifierDropzone.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
           verifierFileInput.click();
         }
       });
+
       verifierDropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
         verifierDropzone.classList.add('dragover');
@@ -583,13 +593,6 @@ const App = {
         verifierDropzone.classList.remove('dragover');
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
           this.handlePublicFileVerification(e.dataTransfer.files[0]);
-        }
-      });
-      verifierFileInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          const f = e.target.files[0];
-          verifierFileInput.value = '';
-          this.handlePublicFileVerification(f);
         }
       });
     }
